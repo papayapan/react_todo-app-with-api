@@ -118,14 +118,21 @@ export const App: React.FC = () => {
 
     const successfulIds: number[] = [];
 
-    for (const todo of completedTodos) {
-      try {
-        await deleteTodo(todo.id);
-        successfulIds.push(todo.id);
-      } catch {
+    const promises = completedTodos.map(todo =>
+      deleteTodo(todo.id)
+        .then(() => todo.id)
+        .catch(() => null),
+    );
+
+    const results = await Promise.all(promises);
+
+    results.forEach(id => {
+      if (id !== null) {
+        successfulIds.push(id);
+      } else {
         setErrorMessage(ErrorMessage.UNABLE_DELETE);
       }
-    }
+    });
 
     setTodos(prevTodos =>
       prevTodos.filter(todo => !successfulIds.includes(todo.id)),

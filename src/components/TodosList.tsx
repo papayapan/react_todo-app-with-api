@@ -23,29 +23,22 @@ export const TodosList: React.FC<Props> = ({
   loadingIds,
   isLoadingAll,
 }) => {
+
+  // eslint-disable-next-line max-len
+  const currentLoadingIds = isLoadingAll ? todos.map(currentTodo => currentTodo.id) : loadingIds;
+
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {isLoadingAll
-        ? todos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            handleDeleteTodo={handleDeleteTodo}
-            handleChecked={handleChecked}
-            handleUpdateTodoTitle={handleUpdateTodoTitle}
-            loadingIds={todos.map(currentTodo => currentTodo.id)}
-          />
-        ))
-        : todos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            handleDeleteTodo={handleDeleteTodo}
-            handleChecked={handleChecked}
-            handleUpdateTodoTitle={handleUpdateTodoTitle}
-            loadingIds={loadingIds}
-          />
-        ))}
+      {todos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          handleDeleteTodo={handleDeleteTodo}
+          handleChecked={handleChecked}
+          handleUpdateTodoTitle={handleUpdateTodoTitle}
+          loadingIds={currentLoadingIds}
+        />
+      ))}
     </section>
   );
 };
