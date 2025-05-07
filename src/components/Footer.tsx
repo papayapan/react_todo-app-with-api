@@ -1,6 +1,7 @@
 import React from 'react';
 import { FilterTypes } from '../types/FilterTypes';
 import { Todo } from '../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   uncompletedTodos: Todo[];
@@ -25,32 +26,19 @@ export const Footer: React.FC<Props> = ({
 
       {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={`filter__link ${filterType === FilterTypes.ALL ? 'selected' : ''}`}
-          data-cy="FilterLinkAll"
-          onClick={() => handleFilterType(FilterTypes.ALL)}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={`filter__link ${filterType === FilterTypes.ACTIVE ? 'selected' : ''}`}
-          data-cy="FilterLinkActive"
-          onClick={() => handleFilterType(FilterTypes.ACTIVE)}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={`filter__link ${filterType === FilterTypes.COMPLETED ? 'selected' : ''}`}
-          data-cy="FilterLinkCompleted"
-          onClick={() => handleFilterType(FilterTypes.COMPLETED)}
-        >
-          Completed
-        </a>
+        {Object.values(FilterTypes).map((type: FilterTypes) => (
+          <a
+            key={type}
+            href={`#/${type === FilterTypes.ALL ? '' : type.toLowerCase()}`}
+            className={classNames('filter__link', {
+              selected: filterType === type,
+            })}
+            data-cy={`FilterLink${type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}`}
+            onClick={() => handleFilterType(type)}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+          </a>
+        ))}
       </nav>
 
       {/* this button should be disabled if there are no completed todos */}

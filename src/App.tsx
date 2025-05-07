@@ -25,9 +25,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(allTodos => {
-        setTodos(allTodos);
-      })
+      .then(setTodos)
       .catch(() => setErrorMessage(ErrorMessage.LOAD_DATA))
       .finally(() => {
         setIsLoadingAll(false);

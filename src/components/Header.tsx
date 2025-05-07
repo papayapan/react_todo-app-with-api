@@ -1,5 +1,6 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
+import classNames from 'classnames';
 
 type Props = {
   addingTodo: Todo | null;
@@ -30,7 +31,9 @@ export const Header: React.FC<Props> = ({
       {!isLoadingAll && todosCount > 0 && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${allCompletedTodos ? 'active' : ''}`}
+          className={classNames('todoapp__toggle-all', {
+            active: allCompletedTodos,
+          })}
           data-cy="ToggleAllButton"
           onClick={handleCheckedAll}
         />

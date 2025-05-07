@@ -39,6 +39,35 @@ export const TodoItem: React.FC<Props> = ({
     }
   };
 
+  const handleKeyUp = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const trimmedTitle = editedTitle.trim();
+
+      if (trimmedTitle === todo.title) {
+        setIsEditing(false);
+
+        return;
+      }
+
+      const isSuccess = await handleUpdateTodoTitle(todo.id, editedTitle);
+
+      if (isSuccess) {
+        setIsEditing(false);
+      }
+    } else if (e.key === 'Escape') {
+      setEditedTitle(todo.title);
+      setIsEditing(false);
+    }
+  };
+
+  const handleOnBlur = () => {
+    if (editedTitle.trim() === todo.title) {
+      setIsEditing(false);
+    } else {
+      handleSubmit();
+    }
+  };
+
   return (
     <div data-cy="Todo" className={`todo ${todo.completed && 'completed'}`}>
       <label className="todo__status-label">
@@ -60,38 +89,8 @@ export const TodoItem: React.FC<Props> = ({
           placeholder="Empty todo will be deleted"
           value={editedTitle}
           onChange={handleEditInput}
-          onKeyUp={async e => {
-            if (e.key === 'Enter') {
-              if (e.key === 'Enter') {
-                const trimmedTitle = editedTitle.trim();
-
-                if (trimmedTitle === todo.title) {
-                  setIsEditing(false);
-
-                  return;
-                }
-              }
-
-              const isSuccess = await handleUpdateTodoTitle(
-                todo.id,
-                editedTitle,
-              );
-
-              if (isSuccess) {
-                setIsEditing(false);
-              }
-            } else if (e.key === 'Escape') {
-              setEditedTitle(todo.title);
-              setIsEditing(false);
-            }
-          }}
-          onBlur={() => {
-            if (editedTitle.trim() === todo.title) {
-              setIsEditing(false);
-            } else {
-              handleSubmit();
-            }
-          }}
+          onKeyUp={handleKeyUp}
+          onBlur={handleOnBlur}
           autoFocus
         />
       ) : (
